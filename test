@@ -5,7 +5,14 @@ import java.lang.reflect.Field;
 
         // Update the value of the annotation
         updateAnnotationValue(currentAnnotation, "new value");
-
+  private static void updateAnnotationValue(Annotation annotation, String newValue)
+            throws NoSuchFieldException, IllegalAccessException {
+        // Use reflection to update the value of the annotation
+        Class<? extends Annotation> annotationType = annotation.annotationType();
+        Field field = annotationType.getDeclaredField("value");
+        field.setAccessible(true);
+        field.set(annotation, newValue);
+    }
 
 public class UpdateColumnAnnotations {
 
