@@ -1,45 +1,36 @@
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-        // Get the current annotation
-        MyAnnotation currentAnnotation = myClassClass.getAnnotation(MyAnnotation.class);
-
-        // Update the value of the annotation
-        updateAnnotationValue(currentAnnotation, "new value");
-  private static void updateAnnotationValue(Annotation annotation, String newValue)
-            throws NoSuchFieldException, IllegalAccessException {
-        // Use reflection to update the value of the annotation
-        Class<? extends Annotation> annotationType = annotation.annotationType();
-        Field field = annotationType.getDeclaredField("value");
-        field.setAccessible(true);
-        field.set(annotation, newValue);
-    }
 
 public class UpdateColumnAnnotations {
 
     public static void main(String[] args) {
-        Class<Student> clazz = Student.class;
+        Class<?> clazz = Student.class;
 
-        // Get all fields of the class
+        // Get all fields in the class
         Field[] fields = clazz.getDeclaredFields();
 
-        // Process each field
         for (Field field : fields) {
             // Check if the field has a @Column annotation
-            Column columnAnnotation = field.getAnnotation(Column.class);
+            if (field.isAnnotationPresent(Column.class)) {
+                Column columnAnnotation = field.getAnnotation(Column.class);
 
-            if (columnAnnotation != null && field.getName().endsWith("Preview")) {
-                // Update the nullable value to true
-                try {
-                    Field nullableField = columnAnnotation.getClass().getDeclaredField("nullable");
-                    nullableField.setAccessible(true);
-                    nullableField.set(columnAnnotation, true);
+                // Get the field name
+                String fieldName = field.getName();
 
-                    // Optional: Print the updated annotation information
-                    System.out.println("Updated Column Annotation: " + columnAnnotation);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    e.printStackTrace();
+                // Update the 'azer' attribute if the field name ends with "Preview"
+                if (fieldName.endsWith("Preview")) {
+                    try {
+                        // Use reflection to set the 'azer' attribute to true
+                        Field azerField = columnAnnotation.getClass().getDeclaredField("azer");
+                        azerField.setAccessible(true);
+                        azerField.set(columnAnnotation, true);
+                    } catch (NoSuchFieldException | IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
+
+        // Now, you can use the updated class with the modified annotations
     }
 }
