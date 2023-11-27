@@ -1,0 +1,32 @@
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+
+public class UpdateColumnAnnotations {
+
+    public static void main(String[] args) {
+        Class<Student> clazz = Student.class;
+
+        // Get all fields of the class
+        Field[] fields = clazz.getDeclaredFields();
+
+        // Process each field
+        for (Field field : fields) {
+            // Check if the field has a @Column annotation
+            Column columnAnnotation = field.getAnnotation(Column.class);
+
+            if (columnAnnotation != null && field.getName().endsWith("Preview")) {
+                // Update the nullable value to true
+                try {
+                    Field nullableField = columnAnnotation.getClass().getDeclaredField("nullable");
+                    nullableField.setAccessible(true);
+                    nullableField.set(columnAnnotation, true);
+
+                    // Optional: Print the updated annotation information
+                    System.out.println("Updated Column Annotation: " + columnAnnotation);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
