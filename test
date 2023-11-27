@@ -1,5 +1,11 @@
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+        // Get the current annotation
+        MyAnnotation currentAnnotation = myClassClass.getAnnotation(MyAnnotation.class);
+
+        // Update the value of the annotation
+        updateAnnotationValue(currentAnnotation, "new value");
+
 
 public class UpdateColumnAnnotations {
 
